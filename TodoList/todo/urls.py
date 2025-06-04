@@ -6,4 +6,7 @@ urlpatterns = [
     path('todo', views.todo, name='todo'),
     path('create', views.create, name='create'),
     path('delete', views.delete, name='delete'),
+    path('ing', views.ing, name='ing'),
+    path('done', views.done, name='done'),
+    path('wait', views.wait, name='wait'),
 ]

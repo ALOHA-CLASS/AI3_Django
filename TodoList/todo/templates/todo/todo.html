@@ -30,6 +30,7 @@
                     </div>
                 </form>
                 <hr>
+                <h3>진행 목록</h3>
                 <table class="table table-bordered text-center align-middle">
                     <thead>
                         <tr class="table-dark">
@@ -39,10 +40,71 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for todo in todos %}
+                        
+                        {% for todo in ing_list %}
+                            <tr {% if todo.status == 'DONE' %}class="table-success"{% endif %}>
+                                <td>
+                                    <form action="./done" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="no" value="{{ todo.no }}">
+                                        <input type="checkbox" class="form-check-input" 
+                                                onchange="this.form.submit()"
+                                                {% if todo.status == 'DONE' %}checked{% endif %}>
+                                    </form>
+                                </td>
+                                <td class="text-start">
+                                    {{ todo.title }}
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <form action="./wait" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="no" value="{{ todo.no }}">
+                                            <button class="btn btn-success">
+                                                <i class="bi bi-arrow-down-square"></i>
+                                            </button>
+                                        </form>
+                                        <form action="./delete" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="no" value="{{ todo.no }}">
+                                            <button class="btn btn-danger">
+                                                <i class="bi bi-trash2"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">
+                                    조회된 데이터가 없습니다.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+                <h3>대기 목록</h3>
+                <table class="table table-bordered text-center align-middle">
+                    <thead>
+                        <tr class="table-dark">
+                            <th>✅</th>
+                            <th class="text-start">할 일</th>
+                            <th>⭐</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for todo in wait_list %}
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="form-check-input" name="" id="">
+                                    <form action="./ing" method="post">
+                                      {% csrf_token %} 
+                                      <input type="hidden" name="no" value="{{ todo.no }}"> 
+                                      <button type="submit" class="btn btn-outline-primary">
+                                        <i class="bi bi-arrow-up-square"></i>
+                                      </button>
+                                    </form>
                                 </td>
                                 <td class="text-start">
                                     {{ todo.title }}
@@ -55,6 +117,12 @@
                                             <i class="bi bi-trash2"></i>
                                         </button>
                                     </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">
+                                    조회된 데이터가 없습니다.
                                 </td>
                             </tr>
                         {% endfor %}
